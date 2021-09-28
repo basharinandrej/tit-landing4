@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
+<!--    Raleway-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&display=swap" rel="stylesheet">
+
+<!--    Playfair-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+
+    <link rel="stylesheet" href="css/spec.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/media.css">
+
+    <title>Landing 4</title>
+</head>
+<body class="body">
+    <header class="body__header header" id="app">
+        <div class="header__container container">
+            <div class="header__main-head main-head">
+                <a href="#" class="main-head__logo">
+                    <svg width="40" height="40" role="img" class="main-head__logo-svg">
+                        <use xlink:href="./images/sprite.svg#icon-logo"/>
+                    </svg>
+                </a>
+
+                <div class="main-head__burger-btn burger-btn burger-btn--js">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+            <div class="header__main-offer main-offer">
+                <h1 class="main-offer__title title">
+                    Найди отношения,
+                    <span>в которых выигрывают оба</span>
+                </h1>
+            </div>
+
+            <form class="main-offer__main-filter main-filter">
+                <div class="main-filter__main-radio main-radio">
+                    <label class="main-radio__radio-label radio-label">
+                        <input
+                                type="radio"
+                                class="radio-label__radio"
+                                name="sex"
+                                value="Female"
+                                checked
+                                @change="changeGender"
+                        >
+                        <span class="radio-label__main-btn main-btn">Девушки</span>
+                    </label>
+
+                    <label class="main-radio__radio-label radio-label">
+                        <input
+                                type="radio"
+                                class="radio-label__radio"
+                                name="sex"
+                                value="Male"
+                                @change="changeGender"
+                        >
+                        <span class="radio-label__main-btn main-btn">Мужчины</span>
+                    </label>
+                </div>
+
+                <label class="main-filter__main-select main-select"
+                       @click="toggleShowPopupSelect"
+                       :class="{'main-select--open-select': isShowSelect}"
+                >
+                    <span class="main-select__current-option current-option">{{city}}</span>
+
+                    <span v-if="isShowSelect && cities.length>=2"
+                          class="main-select__popup-select popup-select"
+                    >
+                        <span v-for="city in cities"
+                              v-if="!city.checked"
+                              @click="clickSelectHandler"
+                              :data-value="city.name"
+                              class="popup-select__item">
+                            {{city.name}}
+                        </span>
+                    </span>
+
+                    <svg
+                        width="16"
+                        height="16"
+                        role="img"
+                        class="main-select__arrow"
+                        :class="{'main-select__arrow--top': isShowSelect}"
+                    >
+                        <use xlink:href="./images/sprite.svg#icon-arrow"></use>
+                    </svg>
+                </label>
+
+                <button class="main-filter__main-btn main-btn main-btn--accept-color" @click="sendHandler">
+                    Найти
+                </button>
+            </form>
+
+            <p v-if="currentUsers === 0 || currentUsers === 1" class="header__paragraph paragraph paragraph--accept-color">Найдено 8 девушек </p>
+            <p v-if="currentUsers === 2 || currentUsers === 3" class="header__paragraph paragraph paragraph--accept-color">Найдено 8 мужчин </p>
+
+            <ul class="header__list-cards list-cards">
+                <li v-for="user in users[currentUsers]" class="list-cards__list-card list-card">
+                    <img :src="`./images/${user.avatarUrl}.png`" alt="avatar-user">
+
+                    <div class="list-card__information-content">
+                        <div class="list-card__wrapper">
+                            <h4 class="list-card__title title">{{user.name}}, {{user.age}}</h4>
+                            <span v-if="user.online" class="list-card__online"></span>
+                        </div>
+                        <p class="list-card__location">{{user.city}}, {{user.country}}</p>
+                    </div>
+
+                    <a href="https://tit-dating.com/search"
+                       target="_blank"
+                       class="list-card__main-btn main-btn"
+                    >
+                        Написать
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="body__main-menu main-menu main-menu--js">
+        <div class="main-menu__container container">
+            <nav class="main-menu__nav-menu nav-menu">
+                <ul class="nav-menu__menu-list menu-list">
+                    <li class="menu-list__item">
+                        <a href="pages/about.html" class="menu-list__link">о нас</a>
+                    </li>
+                    <li class="menu-list__item">
+                        <a href="pages/contacts.html" class="menu-list__link">контакты</a>
+                    </li>
+                    <li class="menu-list__item">
+                        <a href="pages/rules.html" class="menu-list__link">правила</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                isShowSelect: false,
+                gender: 'Female',
+                cities: [{name: 'Москва', checked: true}, {name: 'Санкт-Петербург', checked: false}],
+                city: 'Москва',
+                currentUsers: 0,
+                users: {
+                    0: [{name: "Алиса", age: 19, online: true, city: 'Москва', country: 'Россия', avatarUrl: 'Female_Moscow/1'},
+                    {name: "Камила", age: 25, online: true, city: 'Москва', country: 'Россия', avatarUrl: 'Female_Moscow/2'},
+                    {name: "Елена", age: 20, online: true, city: 'Москва', country: 'Россия',  avatarUrl: 'Female_Moscow/3'},
+                    {name: "Вероника", age: 22, online: true, city: 'Москва', country: 'Россия', avatarUrl: 'Female_Moscow/4'},
+                    {name: "Александра", age: 24, online: true, city: 'Москва', country: 'Россия', avatarUrl: 'Female_Moscow/5'},
+                    {name: "Екатерина", age: 21, online: true, city: 'Москва', country: 'Россия', avatarUrl: 'Female_Moscow/6'},
+                    {name: "Вера", age: 19, online: true, city: 'Москва', country: 'Россия', avatarUrl: 'Female_Moscow/7'},
+                    {name: "Марфа", age: 27, online: true, city: 'Москва', country: 'Россия', avatarUrl: 'Female_Moscow/8'}],
+                    1: [{name: "Светлана", age: 19, online: true, city: 'Санкт-Петербург', country: 'Россия', avatarUrl: 'Female_StP/1'},
+                    {name: "Маргарита", age: 22, online: true, city: 'Санкт-Петербург', country: 'Россия', avatarUrl: 'Female_StP/2'},
+                    {name: "Варвара", age: 24, online: true, city: 'Санкт-Петербург', country: 'Россия', avatarUrl: 'Female_StP/3'},
+                    {name: "Оливия", age: 21, online: true, city: 'Санкт-Петербург', country: 'Россия', avatarUrl: 'Female_StP/4'},
+                    {name: "Софья", age: 26, online: true, city: 'Санкт-Петербург', country: 'Россия', avatarUrl: 'Female_StP/5'},
+                    {name: "Ева", age: 18, online: true, city: 'Санкт-Петербург', country: 'Россия', avatarUrl: 'Female_StP/6'},
+                    {name: "Элина", age: 23, online: true, city: 'Санкт-Петербург', country: 'Россия', avatarUrl: 'Female_StP/7'},
+                    {name: "Александра", age: 20, online: true, city: 'Санкт-Петербург', country: 'Россия', avatarUrl: 'Female_StP/8'}],
+                    2: [{name: "Данил", age: 26, online: true, city: 'Москва', country: 'Россия', avatarUrl: 'Male_Moscow/1'},
+                    {name: "Андрей", age: 31, online: true, city: 'Москва', country: 'Россия', avatarUrl: 'Male_Moscow/2'},
+                    {name: "Максим", age: 38, online: true, city: 'Москва', country: 'Россия', avatarUrl: 'Male_Moscow/3'},
+                    {name: "Владислав", age: 33, online: true, city: 'Москва', country: 'Россия', avatarUrl: 'Male_Moscow/4'},
+                    {name: "Станислав", age: 28, online: true, city: 'Москва', country: 'Россия', avatarUrl: 'Male_Moscow/5'},
+                    {name: "Максимилиан", age: 40, online: true, city: 'Москва', country: 'Россия', avatarUrl: 'Male_Moscow/6'},
+                    {name: "Евгений", age: 29, online: true, city: 'Москва', country: 'Россия', avatarUrl: 'Male_Moscow/7'},
+                    {name: "Андрей", age: 35, online: true, city: 'Москва', country: 'Россия', avatarUrl: 'Male_Moscow/8'}],
+                    3: [{name: "Платон", age: 38, online: true, city: 'Санкт-Петербург', country: 'Россия', avatarUrl: 'Male_StP/1'},
+                    {name: "Артем", age: 29, online: true, city: 'Санкт-Петербург', country: 'Россия', avatarUrl: 'Male_StP/2'},
+                    {name: "Данила", age: 35, online: true, city: 'Санкт-Петербург', country: 'Россия', avatarUrl: 'Male_StP/3'},
+                    {name: "Владислав", age: 27, online: true, city: 'Санкт-Петербург', country: 'Россия', avatarUrl: 'Male_StP/4'},
+                    {name: "Давид", age: 43, online: true, city: 'Санкт-Петербург', country: 'Россия', avatarUrl: 'Male_StP/5'},
+                    {name: "Иван", age: 31, online: true, city: 'Санкт-Петербург', country: 'Россия', avatarUrl: 'Male_StP/6'},
+                    {name: "Михаил", age: 34, online: true, city: 'Санкт-Петербург', country: 'Россия', avatarUrl: 'Male_StP/7'},
+                    {name: "Клим", age: 35, online: true, city: 'Санкт-Петербург', country: 'Россия', avatarUrl: 'Male_StP/8'}]
+                }
+            },
+            methods: {
+                sendHandler(e) {
+                    e.preventDefault();
+                    <!--    0 - Female, Москва-->
+                    <!--    1 - Female, СпБ-->
+                    <!--    2 - Male, Москва-->
+                    <!--    3 - Male, СпБ-->
+                    if (this.city === 'Москва' && this.gender === 'Female') {
+                        return this.currentUsers = 0
+                    } else if (this.city === 'Санкт-Петербург' && this.gender === 'Female') {
+                        return this.currentUsers = 1
+                    } else if (this.city === 'Москва' && this.gender === 'Male') {
+                        return this.currentUsers = 2
+                    } else if (this.city === 'Санкт-Петербург' && this.gender === 'Male') {
+                        return this.currentUsers = 3
+                    }
+                },
+                clickSelectHandler(e) {
+                    this.city = e.target.dataset.value
+                    this.cities = this.cities.map((city)=> {
+                        if (city.name === e.target.dataset.value) {
+                            return {
+                                ...city, checked: true
+                            }
+                        } else {
+                            return {
+                                ...city, checked: false
+                            }
+                        }
+                    })
+                    this.toggleShowPopupSelect(e)
+                },
+                toggleShowPopupSelect(e) {
+                    e.stopPropagation()
+                    this.isShowSelect = !this.isShowSelect
+                },
+                changeGender(e) {
+                    this.gender = e.target.value;
+                }
+            }
+        })
+    </script>
+    <script src="./js/index.js"></script>
+</body>
+</html>
